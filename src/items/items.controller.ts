@@ -10,6 +10,7 @@ import {
 import { CreateItemDto } from './dto/create-item.dto';
 import { ItemsService } from './items.service';
 import { Item } from './item.entity';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 @Controller('items')
 export class ItemsController {
@@ -20,23 +21,18 @@ export class ItemsController {
     return this.itemsService.findAll().then(items => items);
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id): Promise<Item> {
-  //   return this.itemsService.findOne(id).then(item => item);
-  // }
-
   @Post()
-  create(@Body() createItemDto: CreateItemDto): string {
-    return `Name: ${createItemDto.name}`;
+  create(@Body() createItemDto: CreateItemDto): Promise<Item> {
+    return this.itemsService.create(createItemDto)
   }
 
   @Delete(':id')
-  delete(@Param('id') id): string {
-    return `Delete item ${id}`;
+  delete(@Param('id') id): Promise<DeleteResult> {
+    return this.itemsService.delete(id);
   }
 
   @Put(':id')
-  update(@Body() updateItemDto: CreateItemDto, @Param('id') id): string {
-    return `Update item ${id} - Name ${updateItemDto.name}`;
+  update(@Body() updateItemDto: CreateItemDto, @Param('id') id): Promise<UpdateResult> {
+    return this.itemsService.update(id, updateItemDto);
   }
 }
